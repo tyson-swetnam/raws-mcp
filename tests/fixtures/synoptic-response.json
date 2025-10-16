@@ -1,0 +1,44 @@
+{
+  "STATION": [
+    {
+      "STID": "C5725",
+      "NAME": "Monument Creek RAWS",
+      "ELEVATION": "7200",
+      "LATITUDE": "39.5432",
+      "LONGITUDE": "-105.2147",
+      "STATE": "CO",
+      "TIMEZONE": "America/Denver",
+      "STATUS": "ACTIVE",
+      "MNET_SHORTNAME": "RAWS",
+      "OBSERVATIONS": {
+        "date_time": ["2025-08-29T14:00:00Z"],
+        "air_temp_value_1": {
+          "date_time": ["2025-08-29T14:00:00Z"],
+          "value": [88.2]
+        },
+        "relative_humidity_value_1": {
+          "value": [12.5]
+        },
+        "wind_speed_value_1": {
+          "value": [28.3]
+        },
+        "wind_gust_value_1": {
+          "value": [42.7]
+        },
+        "wind_direction_value_1": {
+          "value": [310]
+        },
+        "precip_accum_value_1": {
+          "value": [0.0]
+        },
+        "fuel_moisture_value_1": {
+          "value": [4.2]
+        }
+      }
+    }
+  ],
+  "UNITS": {
+    "temp": "Fahrenheit",
+    "wind": "Miles per hour"
+  }
+}
