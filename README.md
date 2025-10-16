@@ -69,6 +69,8 @@ cp .env.example .env
 
 ### Required: API Tokens
 
+**IMPORTANT:** You must configure at least one API token for the server to work. The server will fail to start without valid credentials.
+
 Create a `.env` file with your API credentials:
 
 ```env
@@ -85,10 +87,51 @@ ENABLE_NWS_INTEGRATION=true
 ENABLE_FIRE_INDICES=true
 ```
 
-**Getting API Tokens:**
+### Step-by-Step: Getting API Tokens
 
-- **Synoptic Data API**: Register at [synopticdata.com](https://synopticdata.com/) (Free tier: 5,000 requests/day)
-- **MesoWest API**: Register at [mesowest.utah.edu](https://mesowest.utah.edu/)
+#### Option 1: Synoptic Data API (Recommended)
+
+1. **Register:** Visit https://synopticdata.com/
+2. **Create Account:** Click "Sign Up" and complete registration
+3. **Access API Settings:**
+   - Log in to your account
+   - Navigate to "My Account" → "API Settings" or "API Keys"
+4. **Generate Token:**
+   - Click "Create New Token" or similar button
+   - Copy your API token (starts with a long alphanumeric string)
+5. **Add to .env:**
+   ```bash
+   SYNOPTIC_API_TOKEN=your_actual_token_here
+   ```
+
+**Free Tier Limits:**
+- 5,000 requests per day
+- Access to 2,000+ RAWS stations
+- Real-time and historical data
+
+#### Option 2: MesoWest API (Backup/Failover)
+
+1. **Register:** Visit https://mesowest.utah.edu/
+2. **Create Account:** Complete the registration form
+3. **Request API Access:**
+   - Navigate to your account settings
+   - Request API access (may require approval)
+4. **Get Token:** Once approved, copy your API token
+5. **Add to .env:**
+   ```bash
+   MESOWEST_API_TOKEN=your_actual_token_here
+   ```
+
+### Failover Configuration
+
+For production use, configure **both** API tokens:
+
+```env
+SYNOPTIC_API_TOKEN=your_synoptic_token
+MESOWEST_API_TOKEN=your_mesowest_token
+```
+
+The server will automatically failover from Synoptic → MesoWest if the primary source fails or reaches rate limits.
 
 ### MCP Server Configuration
 
@@ -276,7 +319,43 @@ Use these station IDs when testing queries or exploring RAWS data.
 
 ## Troubleshooting
 
+### Authentication Errors (HTTP 401)
+
+**Symptom:** Endpoints return "401 Unauthorized" or authentication failures
+
+**Cause:** Missing or invalid API tokens in `.env` file
+
+**Solution:**
+1. Verify `.env` file exists:
+   ```bash
+   ls -la .env
+   ```
+
+2. Check that at least one API token is configured:
+   ```bash
+   grep "API_TOKEN" .env
+   ```
+
+3. Ensure tokens are not placeholder values:
+   ```bash
+   # ❌ Wrong (placeholder):
+   SYNOPTIC_API_TOKEN=your_synoptic_token_here
+
+   # ✓ Correct (actual token):
+   SYNOPTIC_API_TOKEN=abc123def456...
+   ```
+
+4. Obtain valid API tokens:
+   - **Synoptic:** Register at https://synopticdata.com/ → Account → API Settings
+   - **MesoWest:** Register at https://mesowest.utah.edu/ → API Access
+
+5. Restart the MCP server after updating `.env`
+
 ### Server Won't Start
+
+**Error: "No API clients are available"**
+
+This means the server couldn't find valid API tokens. Follow the authentication troubleshooting steps above.
 
 **Check Node.js Version:**
 ```bash
